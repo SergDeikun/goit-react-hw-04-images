@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+
+import { toast } from 'react-toastify';
 
 import { SearchBarWrap } from './searchBar.styled';
 import { SearchForm } from './searchBar.styled';
@@ -10,11 +13,18 @@ class Searchbar extends Component {
   state = { value: '' };
 
   handleChange = e => {
-    this.setState({ value: e.target.value });
+    this.setState({ value: e.target.value.toLowerCase() });
   };
 
   handleSubmit = e => {
     e.preventDefault();
+
+    if (this.state.value.trim() === '') {
+      toast.warn('Pleace, enter a query');
+      return;
+    }
+
+    this.props.onSubmit(this.state.value);
 
     this.reset();
   };
@@ -46,5 +56,9 @@ class Searchbar extends Component {
     );
   }
 }
+
+Searchbar.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+};
 
 export default Searchbar;
