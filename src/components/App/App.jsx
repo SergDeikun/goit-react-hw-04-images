@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
-// import { Oval } from 'react-loader-spinner';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-// import NProgress from 'nprogress';
 import { ImageApi } from 'components/services/api';
 import Searchbar from 'components/searchBar/searchBar';
 import ImageGaleery from 'components/imageGallery/imageGallery';
