@@ -14,6 +14,7 @@ class App extends Component {
     searchQuery: '',
     currentPage: 1,
     images: [],
+    totalHits: 0,
     largeImg: '',
     loading: false,
     error: null,
@@ -27,17 +28,25 @@ class App extends Component {
     if (searchQuery !== prevState.searchQuery) {
       this.setState({ loading: true, images: [] });
       ImageApi({ searchQuery, currentPage, perPage })
-        .then(images => this.setState({ images: images.hits }))
+        .then(({ hits, totalHits }) =>
+          this.setState({
+            images: hits,
+            totalHits: totalHits,
+          })
+        )
         .catch(error => this.setState({ error }))
         .finally(() => this.setState({ loading: false }));
     }
 
-    if (prevState.currentPage !== this.state.currentPage) {
+    if (
+      prevState.currentPage !== this.state.currentPage &&
+      this.state.currentPage !== 1
+    ) {
       this.setState({ loading: true });
       ImageApi({ searchQuery, currentPage, perPage })
-        .then(images => {
+        .then(({ hits }) => {
           this.setState(prevState => ({
-            images: [...prevState.images, ...images.hits],
+            images: [...prevState.images, ...hits],
           }));
         })
         .catch(error => this.setState({ error }))
@@ -57,7 +66,10 @@ class App extends Component {
   };
 
   handleFormSubmit = value => {
-    this.setState({ searchQuery: value });
+    this.setState({
+      searchQuery: value,
+      currentPage: 1,
+    });
   };
 
   handleLoadMore = () => {
@@ -67,7 +79,7 @@ class App extends Component {
   };
 
   render() {
-    const { images, loading, showModal, largeImg } = this.state;
+    const { images, loading, showModal, largeImg, totalHits } = this.state;
 
     return (
       <div>
@@ -84,7 +96,7 @@ class App extends Component {
 
         <ImageGaleery params={images} bigImage={this.getlargeImage} />
 
-        {images.length > 0 && (
+        {totalHits > images.length > 0 && (
           <LoadMoreBtn onClick={this.handleLoadMore} title="Load more" />
         )}
       </div>
