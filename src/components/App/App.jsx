@@ -16,7 +16,6 @@ const App = () => {
   const [largeImg, setLargeImg] = useState('');
   const [totalHits, setTotalHits] = useState('');
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
